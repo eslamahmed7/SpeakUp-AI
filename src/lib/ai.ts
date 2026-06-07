@@ -17,30 +17,47 @@ export async function generateAIResponse(
     return 'Error: API key is missing. Please check your environment variables.';
   }
 
+  if (!messages || messages.length === 0) {
+    return 'Please send a message.';
+  }
+
   try {
     const model = genAI.getGenerativeModel({
       model: 'gemini-1.5-flash',
       systemInstruction,
     });
 
-    const history = messages.slice(0, -1).map(msg => ({
-      role: msg.role,
-      parts: [{ text: msg.text }],
-    }));
+    // Sanitize: last message must be from user
+    const lastMessage = messages[messages.length - 1];
+    if (lastMessage.role !== 'user') {
+      console.error('Last message must be from user');
+      return 'Sorry, an error occurred. Please try again.';
+    }
 
-    const lastMessage = messages[messages.length - 1].text;
+    // Build sanitized history (everything except last message)
+    // Rules: must start with 'user', must strictly alternate user/model
+    const rawHistory = messages.slice(0, -1);
+    const sanitizedHistory: { role: string; parts: { text: string }[] }[] = [];
+    
+    for (const msg of rawHistory) {
+      const expectedRole = sanitizedHistory.length % 2 === 0 ? 'user' : 'model';
+      if (msg.role === expectedRole) {
+        sanitizedHistory.push({ role: msg.role, parts: [{ text: msg.text }] });
+      }
+      // skip messages that break alternation
+    }
 
-    const chat = model.startChat({
-      history,
-    });
+    console.log('Sending chat history to Gemini:', sanitizedHistory);
+    console.log('Sending message to Gemini:', lastMessage.text);
 
-    const result = await chat.sendMessage(lastMessage);
+    const chat = model.startChat({ history: sanitizedHistory });
+    const result = await chat.sendMessage(lastMessage.text);
     return result.response.text();
+
   } catch (error: any) {
     console.error('Error calling Gemini API:', error?.message || error);
-    // Return a user-friendly fallback message
     if (error?.message?.includes('API_KEY') || error?.message?.includes('403')) {
-      return 'API key error. Please check your Gemini API key in the settings.';
+      return 'API key error. Please check your Gemini API key.';
     }
     return 'Sorry, an error occurred while processing your request. Please try again.';
   }

@@ -74,23 +74,27 @@ export default function ConversationPage() {
     setTotalScore(prev => prev + score);
     setScoreCount(prev => prev + 1);
 
-    // Prepare history for Gemini - must start with 'user' role
-    // Exclude the initial AI greeting from history (it's not part of real conversation)
-    const allMessages = chatMessages.slice(1); // skip first AI greeting
-    const history: AIChatMessage[] = allMessages.map(msg => ({
-      role: msg.type === 'ai' ? 'model' : 'user',
-      text: msg.text
-    }));
-    // Only include history pairs (must start with user)
+    // Build history for Gemini - STRICT RULES:
+    // 1. Must start with 'user'
+    // 2. Must alternate user/model
+    // 3. chatMessages at this point does NOT include the new message yet
+    const previousMessages = chatMessages.filter(m => m.type !== 'ai' || chatMessages.indexOf(m) > 0);
+    
+    // Build strictly alternating pairs from previous real exchanges (skip first AI greeting)
     const validHistory: AIChatMessage[] = [];
-    for (let i = 0; i < history.length - 1; i++) {
-      if (history[i].role === 'user' || validHistory.length > 0) {
-        validHistory.push(history[i]);
+    const exchangeMessages = chatMessages.slice(1); // skip opening AI greeting
+    for (const msg of exchangeMessages) {
+      const role = msg.type === 'ai' ? 'model' : 'user';
+      // Only add if it maintains alternating order
+      const lastRole = validHistory.length > 0 ? validHistory[validHistory.length - 1].role : null;
+      if (role !== lastRole) {
+        validHistory.push({ role, text: msg.text });
       }
     }
+    // Add current user message
     validHistory.push({ role: 'user', text: currentInput });
 
-    const systemInstruction = "You are a friendly and helpful AI English language coach. Keep your answers brief, encouraging, and natural. Correct any obvious grammar mistakes gently.";
+    const systemInstruction = "You are a friendly and helpful AI English language coach. Keep your answers brief, encouraging, and natural. Correct any obvious grammar mistakes gently. Always reply in English.";
 
     // Get response from AI
     const responseText = await generateAIResponse(validHistory, systemInstruction);
