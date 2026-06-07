@@ -3,6 +3,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { t } from '../../lib/i18n';
 import { supabase } from '../../lib/supabase';
+import { speakText } from '../../lib/speech';
 import { Volume2Icon, ChevronDownIcon, StarIcon } from 'lucide-react';
 
 interface Vocabulary {
@@ -163,6 +164,13 @@ function VocabularyCard({
   lang: 'ar' | 'en';
 }) {
   const [expanded, setExpanded] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+
+  const handleListen = async () => {
+    setIsSpeaking(true);
+    await speakText(vocab.word_en, 'en-US');
+    setTimeout(() => setIsSpeaking(false), 1500);
+  };
 
   return (
     <div className="glass-card rounded-2xl p-6 border border-white/10 hover:border-white/20 hover:bg-white/5 transition-all duration-300 animate-fade-in">
@@ -192,12 +200,17 @@ function VocabularyCard({
           {t(vocab.category, lang)}
         </span>
         <button
-          onClick={() => {}}
-          className="flex items-center gap-2 px-3 py-1 rounded-lg bg-purple-500/20 border border-purple-500/50 text-purple-300 hover:bg-purple-500/30 transition-all text-sm"
+          onClick={handleListen}
+          disabled={isSpeaking}
+          className={`flex items-center gap-2 px-3 py-1 rounded-lg border text-sm transition-all ${
+            isSpeaking
+              ? 'bg-purple-500/40 border-purple-400 text-purple-200 animate-pulse'
+              : 'bg-purple-500/20 border-purple-500/50 text-purple-300 hover:bg-purple-500/30'
+          }`}
           title={lang === 'ar' ? 'استمع' : 'Listen'}
         >
-          <Volume2Icon className="w-4 h-4" />
-          <span className="text-xs">{t('listen', lang)}</span>
+          <Volume2Icon className={`w-4 h-4 ${isSpeaking ? 'animate-bounce' : ''}`} />
+          <span className="text-xs">{isSpeaking ? '...' : t('listen', lang)}</span>
         </button>
       </div>
 

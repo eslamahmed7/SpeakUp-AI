@@ -236,15 +236,24 @@ export default function RoleplayPage() {
 
     setScore(prev => prev + messageScore);
 
-    // Prepare history for Gemini
-    const history: AIChatMessage[] = messages.map(msg => ({
+    // Prepare history for Gemini - must start with 'user' role
+    // Skip any initial AI greeting messages
+    const allMessages = messages.filter((m, idx) => !(idx === 0 && m.type === 'ai'));
+    const history: AIChatMessage[] = allMessages.map(msg => ({
       role: msg.type === 'ai' ? 'model' : 'user',
       text: msg.text
     }));
-    history.push({ role: 'user', text: currentInput });
+    // Ensure history starts with 'user'
+    const validHistory: AIChatMessage[] = [];
+    for (let i = 0; i < history.length; i++) {
+      if (history[i].role === 'user' || validHistory.length > 0) {
+        validHistory.push(history[i]);
+      }
+    }
+    validHistory.push({ role: 'user', text: currentInput });
 
     // AI Response
-    const responseText = await generateAIResponse(history, selectedScenario.ai_prompt);
+    const responseText = await generateAIResponse(validHistory, selectedScenario.ai_prompt);
     setMessages(prev => [...prev, { type: 'ai', text: responseText }]);
     setIsAiTyping(false);
 

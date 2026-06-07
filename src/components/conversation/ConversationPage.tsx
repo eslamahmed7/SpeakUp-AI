@@ -74,17 +74,26 @@ export default function ConversationPage() {
     setTotalScore(prev => prev + score);
     setScoreCount(prev => prev + 1);
 
-    // Prepare history for Gemini
-    const history: AIChatMessage[] = chatMessages.map(msg => ({
+    // Prepare history for Gemini - must start with 'user' role
+    // Exclude the initial AI greeting from history (it's not part of real conversation)
+    const allMessages = chatMessages.slice(1); // skip first AI greeting
+    const history: AIChatMessage[] = allMessages.map(msg => ({
       role: msg.type === 'ai' ? 'model' : 'user',
       text: msg.text
     }));
-    history.push({ role: 'user', text: currentInput });
+    // Only include history pairs (must start with user)
+    const validHistory: AIChatMessage[] = [];
+    for (let i = 0; i < history.length - 1; i++) {
+      if (history[i].role === 'user' || validHistory.length > 0) {
+        validHistory.push(history[i]);
+      }
+    }
+    validHistory.push({ role: 'user', text: currentInput });
 
     const systemInstruction = "You are a friendly and helpful AI English language coach. Keep your answers brief, encouraging, and natural. Correct any obvious grammar mistakes gently.";
 
     // Get response from AI
-    const responseText = await generateAIResponse(history, systemInstruction);
+    const responseText = await generateAIResponse(validHistory, systemInstruction);
 
     const aiMessage: ChatMessage = {
       type: 'ai',
