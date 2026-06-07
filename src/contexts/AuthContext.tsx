@@ -114,21 +114,36 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const signInAsGuest = useCallback(async () => {
-    const guestEmail = `guest_${Date.now()}@speakup.app`;
-    const guestPassword = `Guest_${Date.now()}_Xy1!`;
-    const { error } = await supabase.auth.signUp({
+    const guestEmail = 'guest@speakup.app';
+    const guestPassword = 'Guest_SpeakUp_2026_Xy1!';
+    
+    // First try to sign in
+    const { error: signInError } = await supabase.auth.signInWithPassword({
       email: guestEmail,
       password: guestPassword,
     });
-    if (!error) {
+    
+    if (signInError) {
+      // If it fails, try to sign up the shared guest account
+      const { error: signUpError } = await supabase.auth.signUp({
+        email: guestEmail,
+        password: guestPassword,
+      });
+      if (!signUpError) {
+        const { data: { user: u } } = await supabase.auth.getUser();
+        if (u) {
+          await supabase.from('profiles').upsert({
+            user_id: u.id,
+            name: 'Guest',
+            language: 'ar',
+            is_guest: true,
+          });
+          await fetchProfile(u.id);
+        }
+      }
+    } else {
       const { data: { user: u } } = await supabase.auth.getUser();
       if (u) {
-        await supabase.from('profiles').upsert({
-          user_id: u.id,
-          name: 'Guest',
-          language: 'ar',
-          is_guest: true,
-        });
         await fetchProfile(u.id);
       }
     }

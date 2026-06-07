@@ -108,11 +108,11 @@ export default function SignupPage() {
   const getPasswordStrengthText = () => {
     switch (passwordStrength) {
       case 'weak':
-        return t('auth.signup.passwordWeak', lang);
+        return t('passwordWeak', lang);
       case 'medium':
-        return t('auth.signup.passwordMedium', lang);
+        return t('passwordMedium', lang);
       case 'strong':
-        return t('auth.signup.passwordStrong', lang);
+        return t('passwordStrong', lang);
       default:
         return '';
     }
@@ -131,10 +131,10 @@ export default function SignupPage() {
         {/* Header */}
         <div className="text-center mb-8 animate-fade-in">
           <h1 className={`text-5xl font-bold ${isRTL ? 'text-right' : 'text-left'} mb-2`}>
-            <span className="gradient-text">{t('auth.signup.title', lang)}</span>
+            <span className="gradient-text">{t('signup', lang)}</span>
           </h1>
           <p className={`text-slate-400 text-lg ${isRTL ? 'text-right' : 'text-left'}`}>
-            {t('auth.signup.subtitle', lang)}
+            {t('welcomeDesc', lang)}
           </p>
         </div>
 
@@ -144,7 +144,7 @@ export default function SignupPage() {
             {/* Name Field */}
             <div>
               <label className={`block text-sm font-semibold text-slate-200 mb-2 ${isRTL ? 'text-right' : 'text-left'}`}>
-                {t('auth.signup.fullName', lang)}
+                {t('name', lang)}
               </label>
               <div className={`relative ${isRTL ? 'flex flex-row-reverse' : 'flex'}`}>
                 <User className="absolute top-1/2 transform -translate-y-1/2 w-5 h-5 text-primary-400 pointer-events-none" style={isRTL ? { right: '12px' } : { left: '12px' }} />
@@ -153,7 +153,7 @@ export default function SignupPage() {
                   name="name"
                   value={formData.name}
                   onChange={handleInputChange}
-                  placeholder={t('auth.signup.fullNamePlaceholder', lang)}
+                  placeholder={t('name', lang)}
                   className={`input-field w-full bg-white/5 border border-white/10 rounded-lg py-3 px-4 text-white placeholder-slate-500 focus:outline-none focus:border-primary-400 focus:bg-white/10 transition-all ${isRTL ? 'pr-12 text-right' : 'pl-12 text-left'}`}
                   disabled={loading || authLoading}
                 />
@@ -163,7 +163,7 @@ export default function SignupPage() {
             {/* Email Field */}
             <div>
               <label className={`block text-sm font-semibold text-slate-200 mb-2 ${isRTL ? 'text-right' : 'text-left'}`}>
-                {t('auth.signup.email', lang)}
+                {t('email', lang)}
               </label>
               <div className={`relative ${isRTL ? 'flex flex-row-reverse' : 'flex'}`}>
                 <Mail className="absolute top-1/2 transform -translate-y-1/2 w-5 h-5 text-primary-400 pointer-events-none" style={isRTL ? { right: '12px' } : { left: '12px' }} />
@@ -172,7 +172,7 @@ export default function SignupPage() {
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
-                  placeholder={t('auth.signup.emailPlaceholder', lang)}
+                  placeholder={t('email', lang)}
                   className={`input-field w-full bg-white/5 border border-white/10 rounded-lg py-3 px-4 text-white placeholder-slate-500 focus:outline-none focus:border-primary-400 focus:bg-white/10 transition-all ${isRTL ? 'pr-12 text-right' : 'pl-12 text-left'}`}
                   disabled={loading || authLoading}
                 />
@@ -182,7 +182,7 @@ export default function SignupPage() {
             {/* Password Field */}
             <div>
               <label className={`block text-sm font-semibold text-slate-200 mb-2 ${isRTL ? 'text-right' : 'text-left'}`}>
-                {t('auth.signup.password', lang)}
+                {t('password', lang)}
               </label>
               <div className={`relative ${isRTL ? 'flex flex-row-reverse' : 'flex'}`}>
                 <Lock className="absolute top-1/2 transform -translate-y-1/2 w-5 h-5 text-primary-400 pointer-events-none" style={isRTL ? { right: '12px' } : { left: '12px' }} />
@@ -191,7 +191,7 @@ export default function SignupPage() {
                   name="password"
                   value={formData.password}
                   onChange={handleInputChange}
-                  placeholder={t('auth.signup.passwordPlaceholder', lang)}
+                  placeholder={t('password', lang)}
                   className={`input-field w-full bg-white/5 border border-white/10 rounded-lg py-3 px-4 text-white placeholder-slate-500 focus:outline-none focus:border-primary-400 focus:bg-white/10 transition-all ${isRTL ? 'pr-12 pl-12 text-right' : 'pl-12 pr-12 text-left'}`}
                   disabled={loading || authLoading}
                 />
@@ -222,7 +222,7 @@ export default function SignupPage() {
             {/* Confirm Password Field */}
             <div>
               <label className={`block text-sm font-semibold text-slate-200 mb-2 ${isRTL ? 'text-right' : 'text-left'}`}>
-                {t('auth.signup.confirmPassword', lang)}
+                {t('confirmPassword', lang)}
               </label>
               <div className={`relative ${isRTL ? 'flex flex-row-reverse' : 'flex'}`}>
                 <Lock className="absolute top-1/2 transform -translate-y-1/2 w-5 h-5 text-primary-400 pointer-events-none" style={isRTL ? { right: '12px' } : { left: '12px' }} />
@@ -231,7 +231,7 @@ export default function SignupPage() {
                   name="confirmPassword"
                   value={formData.confirmPassword}
                   onChange={handleInputChange}
-                  placeholder={t('auth.signup.confirmPasswordPlaceholder', lang)}
+                  placeholder={t('confirmPassword', lang)}
                   className={`input-field w-full bg-white/5 border border-white/10 rounded-lg py-3 px-4 text-white placeholder-slate-500 focus:outline-none focus:border-primary-400 focus:bg-white/10 transition-all ${isRTL ? 'pr-12 pl-12 text-right' : 'pl-12 pr-12 text-left'}`}
                   disabled={loading || authLoading}
                 />
@@ -251,8 +251,8 @@ export default function SignupPage() {
                 <div className={`mt-2 flex items-center gap-2 text-sm ${formData.password === formData.confirmPassword ? 'text-green-400' : 'text-red-400'}`}>
                   <CheckCircle2 className="w-4 h-4" />
                   {formData.password === formData.confirmPassword
-                    ? t('auth.signup.passwordsMatch', lang)
-                    : t('auth.signup.passwordsMismatch', lang)}
+                    ? t('passwordsMatch', lang)
+                    : t('passwordsDontMatch', lang)}
                 </div>
               )}
             </div>
@@ -273,10 +273,10 @@ export default function SignupPage() {
               {loading || authLoading ? (
                 <>
                   <Loader className="w-5 h-5 animate-spin" />
-                  {t('auth.signup.signingUp', lang)}
+                  {t('loading', lang)}
                 </>
               ) : (
-                t('auth.signup.signUp', lang)
+                t('signup', lang)
               )}
             </button>
           </form>
@@ -287,7 +287,7 @@ export default function SignupPage() {
               <div className="w-full border-t border-white/10"></div>
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-4 bg-transparent text-slate-400">{t('auth.signup.haveAccount', lang)}</span>
+              <span className="px-4 bg-transparent text-slate-400">{t('haveAccount', lang)}</span>
             </div>
           </div>
 
@@ -298,14 +298,11 @@ export default function SignupPage() {
             disabled={loading || authLoading}
             className="w-full py-3 rounded-lg font-semibold border-2 border-primary-400/50 text-primary-400 hover:bg-primary-400/10 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {t('auth.signup.loginHere', lang)}
+            {t('signInHere', lang)}
           </button>
         </div>
 
-        {/* Footer */}
-        <p className={`text-center text-slate-500 text-sm mt-6 ${isRTL ? 'text-right' : 'text-left'}`}>
-          {t('auth.signup.privacyNotice', lang)}
-        </p>
+        
       </div>
     </div>
   );

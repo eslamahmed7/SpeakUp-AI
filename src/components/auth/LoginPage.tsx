@@ -75,10 +75,10 @@ export default function LoginPage() {
         {/* Header */}
         <div className="text-center mb-8 animate-fade-in">
           <h1 className={`text-5xl font-bold ${isRTL ? 'text-right' : 'text-left'} mb-2`}>
-            <span className="gradient-text">{t('auth.login.title', lang)}</span>
+            <span className="gradient-text">{t('welcome', lang)}</span>
           </h1>
           <p className={`text-slate-400 text-lg ${isRTL ? 'text-right' : 'text-left'}`}>
-            {t('auth.login.subtitle', lang)}
+            {t('welcomeDesc', lang)}
           </p>
         </div>
 
@@ -88,7 +88,7 @@ export default function LoginPage() {
             {/* Email Field */}
             <div>
               <label className={`block text-sm font-semibold text-slate-200 mb-2 ${isRTL ? 'text-right' : 'text-left'}`}>
-                {t('auth.login.email', lang)}
+                {t('email', lang)}
               </label>
               <div className={`relative ${isRTL ? 'flex flex-row-reverse' : 'flex'}`}>
                 <Mail className="absolute top-1/2 transform -translate-y-1/2 w-5 h-5 text-primary-400 pointer-events-none" style={isRTL ? { right: '12px' } : { left: '12px' }} />
@@ -96,7 +96,7 @@ export default function LoginPage() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder={t('auth.login.emailPlaceholder', lang)}
+                  placeholder={t('email', lang)}
                   className={`input-field w-full bg-white/5 border border-white/10 rounded-lg py-3 px-4 text-white placeholder-slate-500 focus:outline-none focus:border-primary-400 focus:bg-white/10 transition-all ${isRTL ? 'pr-12 text-right' : 'pl-12 text-left'}`}
                   disabled={loading || authLoading}
                 />
@@ -106,7 +106,7 @@ export default function LoginPage() {
             {/* Password Field */}
             <div>
               <label className={`block text-sm font-semibold text-slate-200 mb-2 ${isRTL ? 'text-right' : 'text-left'}`}>
-                {t('auth.login.password', lang)}
+                {t('password', lang)}
               </label>
               <div className={`relative ${isRTL ? 'flex flex-row-reverse' : 'flex'}`}>
                 <Lock className="absolute top-1/2 transform -translate-y-1/2 w-5 h-5 text-primary-400 pointer-events-none" style={isRTL ? { right: '12px' } : { left: '12px' }} />
@@ -114,7 +114,7 @@ export default function LoginPage() {
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder={t('auth.login.passwordPlaceholder', lang)}
+                  placeholder={t('password', lang)}
                   className={`input-field w-full bg-white/5 border border-white/10 rounded-lg py-3 px-4 text-white placeholder-slate-500 focus:outline-none focus:border-primary-400 focus:bg-white/10 transition-all ${isRTL ? 'pr-12 pl-12 text-right' : 'pl-12 pr-12 text-left'}`}
                   disabled={loading || authLoading}
                 />
@@ -145,7 +145,7 @@ export default function LoginPage() {
                 className="text-primary-400 hover:text-primary-300 text-sm font-medium transition-colors"
                 disabled={loading || authLoading}
               >
-                {t('auth.login.forgotPassword', lang)}
+                {t('forgotPassword', lang)}
               </button>
             </div>
 
@@ -158,10 +158,10 @@ export default function LoginPage() {
               {loading || authLoading ? (
                 <>
                   <Loader className="w-5 h-5 animate-spin" />
-                  {t('auth.login.signingIn', lang)}
+                  {t('loading', lang)}
                 </>
               ) : (
-                t('auth.login.signIn', lang)
+                t('login', lang)
               )}
             </button>
 
@@ -172,7 +172,7 @@ export default function LoginPage() {
               disabled={loading || authLoading}
               className="btn-secondary w-full py-3 rounded-lg font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {t('auth.login.continueAsGuest', lang)}
+              {t('continueAsGuest', lang)}
             </button>
           </form>
 
@@ -182,7 +182,7 @@ export default function LoginPage() {
               <div className="w-full border-t border-white/10"></div>
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-4 bg-transparent text-slate-400">{t('auth.login.noAccount', lang)}</span>
+              <span className="px-4 bg-transparent text-slate-400">{t('noAccount', lang)}</span>
             </div>
           </div>
 
@@ -193,14 +193,11 @@ export default function LoginPage() {
             disabled={loading || authLoading}
             className="w-full py-3 rounded-lg font-semibold border-2 border-primary-400/50 text-primary-400 hover:bg-primary-400/10 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {t('auth.login.signUpHere', lang)}
+            {t('signUpHere', lang)}
           </button>
         </div>
 
-        {/* Footer */}
-        <p className={`text-center text-slate-500 text-sm mt-6 ${isRTL ? 'text-right' : 'text-left'}`}>
-          {t('auth.login.privacyNotice', lang)}
-        </p>
+        
       </div>
     </div>
   );
