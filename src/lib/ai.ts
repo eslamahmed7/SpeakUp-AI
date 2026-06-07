@@ -19,7 +19,7 @@ export async function generateAIResponse(
 
   try {
     const model = genAI.getGenerativeModel({
-      model: 'gemini-2.5-flash',
+      model: 'gemini-1.5-flash',
       systemInstruction,
     });
 
@@ -36,8 +36,12 @@ export async function generateAIResponse(
 
     const result = await chat.sendMessage(lastMessage);
     return result.response.text();
-  } catch (error) {
-    console.error('Error calling Gemini API:', error);
+  } catch (error: any) {
+    console.error('Error calling Gemini API:', error?.message || error);
+    // Return a user-friendly fallback message
+    if (error?.message?.includes('API_KEY') || error?.message?.includes('403')) {
+      return 'API key error. Please check your Gemini API key in the settings.';
+    }
     return 'Sorry, an error occurred while processing your request. Please try again.';
   }
 }

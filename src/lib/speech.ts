@@ -90,7 +90,28 @@ export function stopListening() {
   }
 }
 
-export function speakText(text: string, lang: string = 'en-US') {
+function getVoicesAsync(): Promise<SpeechSynthesisVoice[]> {
+  return new Promise((resolve) => {
+    const voices = window.speechSynthesis.getVoices();
+    if (voices.length > 0) {
+      resolve(voices);
+    } else {
+      // Voices not loaded yet — wait for event
+      const handler = () => {
+        window.speechSynthesis.removeEventListener('voiceschanged', handler);
+        resolve(window.speechSynthesis.getVoices());
+      };
+      window.speechSynthesis.addEventListener('voiceschanged', handler);
+      // Fallback: resolve after 1s even if event never fires
+      setTimeout(() => {
+        window.speechSynthesis.removeEventListener('voiceschanged', handler);
+        resolve(window.speechSynthesis.getVoices());
+      }, 1000);
+    }
+  });
+}
+
+export async function speakText(text: string, lang: string = 'en-US') {
   if (!('speechSynthesis' in window)) {
     console.error('Speech synthesis not supported');
     return;
@@ -101,12 +122,16 @@ export function speakText(text: string, lang: string = 'en-US') {
 
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = lang;
-  
-  // Try to find a good voice
-  const voices = window.speechSynthesis.getVoices();
-  const preferredVoice = voices.find(v => v.lang.startsWith(lang) && v.name.includes('Google')) 
-    || voices.find(v => v.lang.startsWith(lang));
-    
+  utterance.rate = 0.9;
+  utterance.pitch = 1;
+
+  // Wait for voices to be loaded before selecting one
+  const voices = await getVoicesAsync();
+  const preferredVoice =
+    voices.find(v => v.lang.startsWith(lang) && v.name.toLowerCase().includes('google')) ||
+    voices.find(v => v.lang.startsWith(lang) && !v.localService) ||
+    voices.find(v => v.lang.startsWith(lang));
+
   if (preferredVoice) {
     utterance.voice = preferredVoice;
   }
