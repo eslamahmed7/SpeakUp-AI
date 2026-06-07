@@ -4,6 +4,7 @@ import { useLanguage } from '../../contexts/LanguageContext';
 import { t } from '../../lib/i18n';
 import { supabase } from '../../lib/supabase';
 import { Volume2Icon, BarChart3Icon } from 'lucide-react';
+import { speakText } from '../../lib/speech';
 
 interface Sentence {
   id: string;
@@ -208,8 +209,8 @@ function SentenceCard({
         </div>
 
         <button
-          onClick={() => {}}
-          className="flex items-center gap-2 px-3 py-1 rounded-lg bg-purple-500/20 border border-purple-500/50 text-purple-300 hover:bg-purple-500/30 transition-all text-sm"
+          onClick={() => speakText(sentence.sentence_en, 'en-US')}
+          className="flex items-center gap-2 px-3 py-1 rounded-lg bg-purple-500/20 border border-purple-500/50 text-purple-300 hover:bg-purple-500/30 transition-all text-sm active:scale-95"
           title={lang === 'ar' ? 'استمع' : 'Listen'}
         >
           <Volume2Icon className="w-4 h-4" />

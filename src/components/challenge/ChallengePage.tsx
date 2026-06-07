@@ -5,6 +5,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { t } from '../../lib/i18n';
 import { supabase } from '../../lib/supabase';
+import { speakText } from '../../lib/speech';
 
 interface Word {
   en: string;
@@ -424,7 +425,10 @@ export default function ChallengePage() {
                         <p className="text-slate-400 text-sm">
                           {lang === 'ar' ? sentence.en : sentence.ar}
                         </p>
-                        <button className="inline-flex items-center gap-2 px-4 py-2 bg-primary-500/20 hover:bg-primary-500/30 rounded-lg transition-colors">
+                        <button
+                          onClick={() => speakText(sentence.en, 'en-US')}
+                          className="inline-flex items-center gap-2 px-4 py-2 bg-primary-500/20 hover:bg-primary-500/30 rounded-lg transition-colors active:scale-95"
+                        >
                           <Volume2 className="w-4 h-4 text-primary-400" />
                           <span className="text-sm text-primary-400">
                             {lang === 'ar' ? 'استمع' : 'Listen'}
